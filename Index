@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dawah Blog</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* En-tête */
+        header {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        /* Conteneur principal */
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        /* Articles */
+        article {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        article h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .meta {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        /* Pied de page */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 20px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container { width: 95%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Mon Blog de Savoir</h1>
+        <p>Partage d'histoire, de foi et de tech</p>
+    </header>
+
+    <div class="container">
+        
+        <article>
+            <h2>L'importance du nom Muhammad</h2>
+            <div class="meta">Publié le 16 avril 2026</div>
+            <p>Dans cet article, j'explique pourquoi la transcription correcte du nom du Prophète est essentielle pour respecter son identité et l'étymologie arabe...</p>
+            <p>Le mot "Muhammad" signifie "le digne de louanges", contrairement à certaines déformations historiques.</p>
+        </article>
+
+        <article>
+            <h2>Mon premier poème Slam</h2>
+            <div class="meta">Publié le 15 avril 2026</div>
+            <p>Voici un extrait de mon dernier slam sur la justice sociale et la persévérance scolaire en secondaire 2...</p>
+        </article>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Créé avec passion</p>
+    </footer>
+
+</body>
+</html>
