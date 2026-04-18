@@ -1,4 +1,4 @@
-## AS Salam Ailoukoum dear brother and sister 👋
+## السلام عليكم dear brother and sister 👋
 
 <!--
 **Dawahpioneer/Dawahpioneer** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
