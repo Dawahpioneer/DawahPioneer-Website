@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dawah Pioneer - Outils & Widgets</title>
+    <style>
+        /* Style global cohérent avec ton blog */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        header {
+            background: #005901; /* Ton Vert */
+            color: #fcde00; /* Ton Jaune */
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0c05ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Grille des Widgets */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #0c05ff; /* Ton Bleu */
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-bottom: 5px solid #fcde00;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #fcde00;
+            border-bottom: 1px solid rgba(252, 222, 0, 0.3);
+            padding-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        /* Styles spécifiques aux éléments interactifs */
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #fcde00;
+            color: #005901;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ffffff;
+            transform: scale(1.02);
+        }
+
+        .count-number {
+            font-size: 3rem;
+            font-weight: bold;
+            display: block;
+            margin: 10px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .event { font-size: 0.9rem; margin: 8px 0; text-align: left; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #005901;
+            color: #fcde00;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Dawah Pioneer Tools</h1>
+        <p>Practical resources for the daily life of the Ummah</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="nav-back">← Back to Blog</a>
+
+        <div class="tools-grid">
+
+            <div class="card">
+                <h2>🕋 Dhikr Counter</h2>
+                <select id="dhikr">
+                    <option value="SubhanAllah">سُبْحَانَ اللَّهِ</option>
+                    <option value="Alhamdulillah">الْحَمْدُ لِلَّهِ</option>
+                    <option value="Allahu Akbar">اللَّهُ أَكْبَرُ</option>
+                    <option value="La ilaha illa Allah">لَا إِلَهَ إِلَّا اللَّهُ</option>
+                    <option value="Astaghfirullah">أَسْتَغْفِرُ اللَّهَ</option>
+                </select>
+                <span class="count-number" id="count">0</span>
+                <button onclick="increment()">🧮 Repeat</button>
+                <button onclick="resetCounter()" style="background:#005901; color:white; margin-top:5px;">🔄 Reset</button>
+            </div>
+
+            <div class="card">
+                <h2>🕌 Islamic Events</h2>
+                <div id="events-container"></div>
+            </div>
+
+            <div class="card">
+                <h2>📅 Hijri Converter</h2>
+                <input type="date" id="gregorianDate">
+                <button onclick="convertDate()">Convert to Hijri</button>
+                <p id="hijriResult" style="font-weight: bold; color: #fcde00;"></p>
+            </div>
+
+            <div class="card">
+                <h2>💰 Zakat Calculator</h2>
+                <input type="number" id="goldPrice" placeholder="Price of 1g gold ($)">
+                <input type="number" id="wealth" placeholder="Your total wealth ($)">
+                <button onclick="calculateZakat()">Calculate My Zakat</button>
+                <div id="zakatResult" style="font-size: 0.85rem; margin-top:10px;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Created for Allah SWT</p>
+    </footer>
+
+    <script>
+        // --- LOGIQUE DHIKR ---
+        let count = 0;
+        function increment() {
+            count++;
+            document.getElementById("count").textContent = count;
+        }
+        function resetCounter() {
+            count = 0;
+            document.getElementById("count").textContent = count;
+        }
+
+        // --- LOGIQUE COUNTDOWN ---
+        const events = [
+            { name: "Ramadan", date: "2027-02-07" },
+            { name: "Aïd al-Fitr", date: "2026-03-20" },
+            { name: "Arafat day", date: "2026-06-26" },
+            { name: "Aïd al-Adha", date: "2026-06-27" },
+            { name: "Achoura", date: "2026-07-25" },
+            { name: "Mawlid an-Nabi", date: "2026-08-25" }
+        ];
+        const today = new Date();
+        const evContainer = document.getElementById("events-container");
+        events.forEach(event => {
+            const eventDate = new Date(event.date);
+            const diffDays = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+            const msg = diffDays >= 0 ? `📆 ${event.name}: in ${diffDays} days` : `✅ ${event.name} passed`;
+            const div = document.createElement("div");
+            div.className = "event";
+            div.textContent = msg;
+            evContainer.appendChild(div);
+        });
+
+        // --- LOGIQUE CONVERTISSEUR ---
+        function convertDate() {
+            const val = document.getElementById('gregorianDate').value;
+            if(!val) return;
+            const gDate = new Date(val);
+            const hDate = new Intl.DateTimeFormat('fr-FR-u-ca-islamic', {
+                day: 'numeric', month: 'long', year: 'numeric'
+            }).format(gDate);
+            document.getElementById('hijriResult').innerText = `Hijri: ${hDate}`;
+        }
+
+        // --- LOGIQUE ZAKAT ---
+        function calculateZakat() {
+            const wealth = parseFloat(document.getElementById('wealth').value);
+            const gold = parseFloat(document.getElementById('goldPrice').value);
+            const res = document.getElementById('zakatResult');
+            if(isNaN(wealth) || isNaN(gold)) {
+                res.innerHTML = "Enter valid numbers.";
+                return;
+            }
+            const nissab = gold * 85;
+            if (wealth >= nissab) {
+                const zakat = wealth * 0.025;
+                res.innerHTML = `Nissab is ${nissab.toFixed(2)}$. <br><b>Zakat: ${zakat.toFixed(2)}$</b>`;
+            } else {
+                res.innerHTML = `Wealth below Nissab (${nissab.toFixed(2)}$). No Zakat due.`;
+            }
+        }
+    </script>
+</body>
+</html>
