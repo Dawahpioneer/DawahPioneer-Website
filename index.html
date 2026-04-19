@@ -22,15 +22,30 @@
             text-align: center;
         }
 
-        /* Conteneur principal */
+        /* Conteneur principal avec Flexbox pour la Sidebar */
         .container {
-            width: 80%;
+            width: 90%;
+            max-width: 1200px;
             margin: auto;
-            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap; /* Pour le mobile */
+            gap: 20px;
             padding: 20px;
         }
 
-        /* Articles */
+        /* Zone des Articles (Gauche) */
+        .articles-area {
+            flex: 3; /* Prend 75% de l'espace */
+            min-width: 300px;
+        }
+
+        /* Zone Sidebar (Droite) */
+        .sidebar {
+            flex: 1; /* Prend 25% de l'espace */
+            min-width: 280px;
+        }
+
+        /* Style des Articles */
         article {
             background: #0c05ff;
             padding: 20px;
@@ -50,6 +65,23 @@
             margin-bottom: 15px;
         }
 
+        /* Style des Widgets dans la Sidebar */
+        .widget {
+            background: #005901;
+            color: #fcde00;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #0c05ff;
+        }
+
+        .widget h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #fcde00;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+
         /* Pied de page */
         footer {
             text-align: center;
@@ -58,7 +90,12 @@
             color: #fcde00;
             margin-top: 20px;
         }
- 
+
+        /* Ajustement Mobile */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .articles-area, .sidebar { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -68,32 +105,46 @@
         <p>The place where the Ummah can express</p>
     </header>
 
-    <div class="main-content">
-    <div class="articles-area">
-        </div>
+    <div class="container">
         
-        <article>
-            <h2>The western conspiracy</h2>
-            <div class="meta">Publish April 18th 2026</div>
-            <p>I will explain how the western world tried and is trying to destroy the Ummah in 2 parts</p>
-            </p>"You have nothing to do with those who make divisions in their religion and become the partisans of their factions"</p>
-            <a href="article-westernconspiracy.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
-        </article>
+        <div class="articles-area">
+            
+            <article>
+                <h2>The western conspiracy</h2>
+                <div class="meta">Published April 18th 2026</div>
+                <p>I will explain how the western world tried and is trying to destroy the Ummah in 2 parts.</p>
+                <p><em>"You have nothing to do with those who make divisions in their religion and become the partisans of their factions"</em></p>
+                <a href="article-westernconspiracy.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
+            </article>
 
-        <article>
-            <h2>How to have a strong Iman</h2>
-            <div class="meta">Publish April 18th 2026</div>
-            <p></p>This text will explain how to have a stronger iman and believe.
-       <a href="article-iman.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
- </article>
+            <article>
+                <h2>How to have a strong Iman</h2>
+                <div class="meta">Published April 18th 2026</div>
+                <p>This text will explain how to have a stronger iman and belief.</p>
+                <a href="article-iman.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
+            </article>
 
-  
-         
+        </div>
+
+        <aside class="sidebar">
+            
+            <div class="widget">
+                <h3>Prayer Times</h3>
+                <p style="text-align: center; font-size: 0.8rem; color: white;">
+                    (Insère ton code widget ici)
+                </p>
             </div>
-    </aside>
-</div>
 
-    <footer>
+            <div class="widget">
+                <h3>About Me</h3>
+                <p style="color: white; font-size: 0.9rem;">
+                    Dawah Pioneer - Share the true message of Islam to the World.
+                </p>
+            </div>
+
+        </aside>
+
+    </div> <footer>
         <p>&copy; 2026 - Created for Allah SWT</p>
     </footer>
 
