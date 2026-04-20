@@ -11,7 +11,7 @@
             line-height: 1.6;
             margin: 0;
             background-color: #ffffff;
-            color: #333; /* Changé pour être lisible sur fond blanc */
+            color: #333;
         }
 
         /* En-tête */
@@ -46,7 +46,7 @@
         /* Articles */
         article {
             background: #0c05ff;
-            color: white; /* Texte en blanc sur fond bleu */
+            color: white;
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 8px;
@@ -72,6 +72,19 @@
             padding-bottom: 5px;
             text-align: center;
         }
+
+        /* Style spécifique pour le Verset du Jour */
+        .ayah-container { text-align: center; color: white; padding: 5px; }
+        .ayah-arabic { 
+            display: block; 
+            font-size: 1.4rem; 
+            margin-bottom: 15px; 
+            color: #fcde00; 
+            line-height: 1.8;
+            direction: rtl; /* Pour l'arabe de droite à gauche */
+        }
+        .ayah-english { font-style: italic; font-size: 0.9rem; display: block; margin-bottom: 10px; }
+        .ayah-ref { font-weight: bold; font-size: 0.75rem; color: #fcde00; text-transform: uppercase; }
 
         /* Section Discussion */
         .discussion-section {
@@ -139,6 +152,15 @@
 
         <aside class="sidebar">
             <div class="widget">
+                <h3>Verse of the Day</h3>
+                <div class="ayah-container">
+                    <span id="ayahArabic" class="ayah-arabic">...</span>
+                    <span id="ayahEnglish" class="ayah-english">Loading the Word of Allah...</span>
+                    <span id="ayahRef" class="ayah-ref"></span>
+                </div>
+            </div>
+
+            <div class="widget">
                 <h3>Prayer Times</h3>
                 <div class="prayer-container">
                     <p id="currentDate"></p>
@@ -185,6 +207,29 @@
     </footer>
 
     <script>
+        // --- LOGIQUE DU VERSET DU JOUR ---
+        async function fetchDailyAyah() {
+            try {
+                const randomAyah = Math.floor(Math.random() * 6236) + 1;
+                // Appel pour l'arabe
+                const resArabic = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/quran-simple`);
+                const dataArabic = await resArabic.json();
+                // Appel pour l'anglais
+                const resEnglish = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/en.asad`);
+                const dataEnglish = await resEnglish.json();
+
+                if (dataArabic.code === 200 && dataEnglish.code === 200) {
+                    document.getElementById('ayahArabic').innerText = dataArabic.data.text;
+                    document.getElementById('ayahEnglish').innerText = `"${dataEnglish.data.text}"`;
+                    document.getElementById('ayahRef').innerText = `— Surah ${dataEnglish.data.surah.englishName} (${dataEnglish.data.surah.number}:${dataEnglish.data.numberInSurah})`;
+                }
+            } catch (error) {
+                document.getElementById('ayahEnglish').innerText = "Hold firmly to the rope of Allah.";
+                document.getElementById('ayahRef').innerText = "— (3:103)";
+            }
+        }
+
+        // --- LOGIQUE DES PRIÈRES ---
         const allMoments = ["Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight"];
 
         async function getPrayerTimes(city) {
@@ -234,6 +279,7 @@
         window.onload = function() {
             showDate();
             showPrayerTimes("Montreal");
+            fetchDailyAyah(); // Lance le verset au démarrage
         };
     </script>
 </body>
