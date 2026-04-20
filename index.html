@@ -11,7 +11,7 @@
             line-height: 1.6;
             margin: 0;
             background-color: #ffffff;
-            color: #ffffff;
+            color: #333; /* Changé pour être lisible sur fond blanc */
         }
 
         /* En-tête */
@@ -46,6 +46,7 @@
         /* Articles */
         article {
             background: #0c05ff;
+            color: white; /* Texte en blanc sur fond bleu */
             padding: 20px;
             margin-bottom: 20px;
             border-radius: 8px;
@@ -72,7 +73,18 @@
             text-align: center;
         }
 
-        /* Styles spécifiques pour le widget de prière ajusté */
+        /* Section Discussion */
+        .discussion-section {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 12px;
+            border-top: 5px solid #005901;
+        }
+
+        /* Styles prière */
         .prayer-container { color: white; text-align: center; }
         #currentDate { font-size: 0.8rem; font-style: italic; margin-bottom: 10px; color: #fcde00; }
         .search-box { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -149,6 +161,25 @@
 
     </div>
 
+    <section class="discussion-section">
+        <h2 style="color: #005901; text-align: center;">💬 Community Discussion</h2>
+        <script src="https://giscus.app/client.js"
+                data-repo="DawahPioneer/DawahPioneer-Website"
+                data-repo-id="R_kgDOSFOv2A"
+                data-category="General"
+                data-category-id="DIC_kwDOSFOv2M4C7RVo"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="light"
+                data-lang="fr"
+                crossorigin="anonymous"
+                async>
+        </script>
+    </section>
+
     <footer>
         <p>&copy; 2026 - Created for Allah SWT</p>
     </footer>
@@ -202,9 +233,8 @@
 
         window.onload = function() {
             showDate();
-            showPrayerTimes("Montreal"); // Par défaut sur ta ville
+            showPrayerTimes("Montreal");
         };
     </script>
-
 </body>
 </html>
