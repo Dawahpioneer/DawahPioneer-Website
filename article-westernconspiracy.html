@@ -26,7 +26,22 @@
             margin: auto;
             padding: 20px;
         }
+/* Barre de progression de lecture */
+.progress-container {
+    position: fixed;
+    top: 0;
+    z-index: 1000; /* Pour qu'elle soit au-dessus de tout */
+    width: 100%;
+    height: 4px; /* Très fine pour rester élégante */
+    background: transparent;
+}
 
+.progress-bar {
+    height: 4px;
+    background: #fcde00; /* Jaune pour bien ressortir sur le vert du header */
+    width: 0%; /* Commence à 0 */
+    transition: width 0.1s ease;
+}
         .full-article {
             background: #0c05ff;
             padding: 30px;
@@ -75,7 +90,10 @@
 
     <div class="container">
         <a href="index.html" class="back-link">← Back</a>
-        
+      
+        <div class="progress-container">
+    <div class="progress-bar" id="myBar"></div>
+</div> 
         <article class="full-article">
             <h2>Western Conspiracy Part 1: The Brain Trade</h2>
             <div class="meta">Publish April 18th 2026</div>
