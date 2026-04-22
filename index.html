@@ -247,25 +247,29 @@
             }
         } catch (e) { console.error(e); }
     }
-
-    // --- FETCH HADITH (CORRIGÉ) ---
-    async function fetchDailyHadith() {
-        try {
-            const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/?t=' + new Date().getTime());
-            const data = await res.json();
-            
-            if (data.data && data.data.hadith_english) {
-                document.getElementById('hadithText').innerText = `"${data.data.hadith_english}"`;
-                document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
-            } else {
-                throw new Error("Data empty");
-            }
-        } catch (e) { 
-            console.error(e);
-            document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
-            document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
+    /async function fetchDailyHadith() {
+    try {
+        // Utilisation d'une URL qui accepte mieux le HTTPS
+        const res = await fetch('https://hadithapi.com/api/hadiths?apiKey=$2y$10$v6Yn6vVpX8Z3e8zI9Y8Ebe0G7uH8O1v7p4N8z7K9&book=sahih-bukhari&paginate=1', {
+            method: 'GET'
+        });
+        const data = await res.json();
+        
+        // On vérifie si on a bien reçu un hadith
+        if (data && data.hadiths && data.hadiths.data.length > 0) {
+            const h = data.hadiths.data[0];
+            document.getElementById('hadithText').innerText = `"${h.hadithEnglish}"`;
+            document.getElementById('hadithRef').innerText = `— ${h.book} (Hadith: ${h.hadithNumber})`;
+        } else {
+            throw new Error("Erreur de données");
         }
+    } catch (e) { 
+        console.log("L'API est bloquée ou en panne, affichage du hadith par défaut.");
+        // Hadith de secours si l'internet coupe ou l'API bug
+        document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
+        document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
     }
+}
 
     // --- LOGIQUE PRIÈRES & DATE ---
     const allMoments = ["Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight"];
