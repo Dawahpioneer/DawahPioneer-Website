@@ -257,10 +257,8 @@
             // Si l'API répond mais que la donnée est vide, on met un Hadith de secours
             throw new Error("Data empty");
         }
-    } catch (e) { 
-        console.log("Erreur API, affichage du Hadith de secours");
-        document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
-        document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
+     } catch (e) { console.error(e); }
+       
     }
 }
 
