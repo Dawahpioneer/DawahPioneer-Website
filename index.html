@@ -17,6 +17,22 @@
             color: #333;
         }
 
+        /* Barre de progression */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            height: 5px;
+            background: transparent;
+        }
+        .progress-bar {
+            height: 5px;
+            background: #fcde00;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
         header {
             background: #005901;
             color: #fcde00;
@@ -49,7 +65,6 @@
         article h2 { color: #ffffff; margin-top: 0; }
         .meta { font-size: 0.9rem; color: #fcde00; margin-bottom: 15px; }
 
-        /* Widgets Sidebar */
         .widget {
             background: #005901;
             color: #fcde00;
@@ -67,7 +82,6 @@
             text-align: center;
         }
 
-        /* --- STYLES DU DÉROULEUR (SLIDER) --- */
         .slider-container {
             position: relative;
             text-align: center;
@@ -76,7 +90,7 @@
         }
 
         .slide {
-            display: none; /* Cache par défaut */
+            display: none;
             animation: fadeIn 0.8s ease-in-out;
         }
 
@@ -97,7 +111,6 @@
         .translation-text { font-style: italic; font-size: 0.9rem; display: block; margin-bottom: 10px; }
         .reference-text { font-weight: bold; font-size: 0.75rem; color: #fcde00; text-transform: uppercase; }
 
-        /* Styles prière */
         .prayer-container { color: white; text-align: center; }
         #currentDate { font-size: 0.8rem; font-style: italic; margin-bottom: 10px; color: #fcde00; }
         .search-box { display: flex; gap: 5px; margin-bottom: 10px; }
@@ -126,13 +139,16 @@
 </head>
 <body>
 
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+
     <header>
         <h1>Welcome to my Dawah Pioneer's Blog</h1>
         <p>The place where the Ummah can express</p>
     </header>
 
     <div class="container">
-        
         <div class="articles-area">
             <article>
                 <h2>The western conspiracy</h2>
@@ -175,7 +191,6 @@
                         <button onclick="updateCity()">Go</button>
                     </div>
                     <ul id="prayerTimes"></ul>
-                    <p id="errorMessage" style="color: #ff4d4d; font-size: 0.7rem;"></p>
                 </div>
             </div>
 
@@ -186,100 +201,81 @@
                 </p>
             </div>
         </aside>
-
     </div>
-
-    <section class="discussion-section">
-        <h2 style="color: #005901; text-align: center;">💬 Community Discussion</h2>
-        <script src="https://giscus.app/client.js"
-                data-repo="DawahPioneer/DawahPioneer-Website"
-                data-repo-id="R_kgDOSFOv2A"
-                data-category="General"
-                data-category-id="DIC_kwDOSFOv2M4C7RVo"
-                data-mapping="pathname"
-                data-strict="0"
-                data-reactions-enabled="1"
-                data-emit-metadata="0"
-                data-input-position="bottom"
-                data-theme="light"
-                data-lang="fr"
-                crossorigin="anonymous"
-                async>
-        </script>
-    </section>
 
     <footer>
         <p>&copy; 2026 - Created for Allah SWT</p>
     </footer>
+
     <script>
-    // --- ROTATION AUTOMATIQUE ---
+    // --- BARRE DE PROGRESSION ---
+    window.onscroll = function() { updateProgressBar(); };
+    function updateProgressBar() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById("myBar").style.width = scrolled + "%";
+    }
+
+    // --- SLIDER ---
     let currentSlide = 0;
     const slides = ['slideAyah', 'slideHadith'];
     const titles = ['Verse of the Day', 'Hadith of the Day'];
 
     function rotateSlides() {
-        const currentElem = document.getElementById(slides[currentSlide]);
-        if(currentElem) currentElem.classList.remove('active');
-        
+        document.getElementById(slides[currentSlide]).classList.remove('active');
         currentSlide = (currentSlide + 1) % slides.length;
-        
-        const nextElem = document.getElementById(slides[currentSlide]);
-        if(nextElem) nextElem.classList.add('active');
-        
+        document.getElementById(slides[currentSlide]).classList.add('active');
         document.getElementById('sliderTitle').innerText = titles[currentSlide];
     }
-
     setInterval(rotateSlides, 10000); 
 
     // --- FETCH VERSET ---
     async function fetchDailyAyah() {
         try {
             const randomAyah = Math.floor(Math.random() * 6236) + 1;
-            const resArabic = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/quran-simple`);
-            const dataArabic = await resArabic.json();
-            const resEnglish = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/en.asad`);
-            const dataEnglish = await resEnglish.json();
+            const resAr = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/quran-simple`);
+            const dataAr = await resAr.json();
+            const resEn = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/en.asad`);
+            const dataEn = await resEn.json();
 
-            if (dataArabic.code === 200 && dataEnglish.code === 200) {
-                document.getElementById('ayahArabic').innerText = dataArabic.data.text;
-                document.getElementById('ayahEnglish').innerText = `"${dataEnglish.data.text}"`;
-                document.getElementById('ayahRef').innerText = `— Surah ${dataEnglish.data.surah.englishName} (${dataEnglish.data.surah.number}:${dataEnglish.data.numberInSurah})`;
+            if (dataAr.code === 200) {
+                document.getElementById('ayahArabic').innerText = dataAr.data.text;
+                document.getElementById('ayahEnglish').innerText = `"${dataEn.data.text}"`;
+                document.getElementById('ayahRef').innerText = `— Surah ${dataEn.data.surah.englishName} (${dataEn.data.surah.number}:${dataEn.data.numberInSurah})`;
             }
         } catch (e) { console.error(e); }
     }
-    /async function fetchDailyHadith() {
-    try {
-        // Utilisation d'une URL qui accepte mieux le HTTPS
-        const res = await fetch('https://hadithapi.com/api/hadiths?apiKey=$2y$10$v6Yn6vVpX8Z3e8zI9Y8Ebe0G7uH8O1v7p4N8z7K9&book=sahih-bukhari&paginate=1', {
-            method: 'GET'
-        });
-        const data = await res.json();
-        
-        // On vérifie si on a bien reçu un hadith
-        if (data && data.hadiths && data.hadiths.data.length > 0) {
-            const h = data.hadiths.data[0];
-            document.getElementById('hadithText').innerText = `"${h.hadithEnglish}"`;
-            document.getElementById('hadithRef').innerText = `— ${h.book} (Hadith: ${h.hadithNumber})`;
-        } else {
-            throw new Error("Erreur de données");
-        }
-    } catch (e) { 
-        console.log("L'API est bloquée ou en panne, affichage du hadith par défaut.");
-        // Hadith de secours si l'internet coupe ou l'API bug
-        document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
-        document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
-    }
-}
 
-    // --- LOGIQUE PRIÈRES & DATE ---
-    const allMoments = ["Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight"];
-
-    async function getPrayerTimes(city) {
+    // --- FETCH HADITH ---
+    async function fetchDailyHadith() {
         try {
-            const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
-            const data = await response.json();
-            return data.data.timings;
-        } catch (error) { return null; }
+            const res = await fetch('https://hadithapi.com/api/hadiths?apiKey=$2y$10$v6Yn6vVpX8Z3e8zI9Y8Ebe0G7uH8O1v7p4N8z7K9&book=sahih-bukhari&paginate=1');
+            const data = await res.json();
+            if (data && data.hadiths && data.hadiths.data.length > 0) {
+                const h = data.hadiths.data[0];
+                document.getElementById('hadithText').innerText = `"${h.hadithEnglish}"`;
+                document.getElementById('hadithRef').innerText = `— Sahih al-Bukhari (${h.hadithNumber})`;
+            } else { throw new Error(); }
+        } catch (e) {
+            document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
+            document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
+        }
+    }
+
+    // --- PRAYER TIMES ---
+    const allMoments = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+    async function showPrayerTimes(city) {
+        try {
+            const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
+            const data = await res.json();
+            const timings = data.data.timings;
+            let html = "";
+            allMoments.forEach(m => {
+                html += `<li><span class="prayer-name">${m}</span><span class="prayer-time">${timings[m]}</span></li>`;
+            });
+            document.getElementById("prayerTimes").innerHTML = html;
+        } catch (e) { console.error(e); }
     }
 
     function updateCity() {
@@ -287,33 +283,13 @@
         showPrayerTimes(city);
     }
 
-    function showPrayerTimes(city) {
-        const listElement = document.getElementById("prayerTimes");
-        getPrayerTimes(city).then(prayerTimes => {
-            if (!prayerTimes) return;
-            let html = "";
-            allMoments.forEach(moment => {
-                if (prayerTimes[moment]) {
-                    const isSecondary = ["Imsak", "Sunrise", "Midnight"].includes(moment);
-                    html += `<li><span class="prayer-name ${isSecondary ? 'secondary' : ''}">${moment}</span><span class="prayer-time">${prayerTimes[moment]}</span></li>`;
-                }
-            });
-            listElement.innerHTML = html;
-        });
-    }
-
-    function showDate() {
-        const today = new Date();
-        const options = { weekday: 'long', month: 'long', day: 'numeric' };
-        document.getElementById("currentDate").innerText = today.toLocaleDateString('en-US', options);
-    }
-
     window.onload = function() {
-        showDate();
+        const today = new Date();
+        document.getElementById("currentDate").innerText = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
         showPrayerTimes("Montreal");
         fetchDailyAyah();
         fetchDailyHadith();
     };
-</script>
+    </script>
 </body>
 </html>
