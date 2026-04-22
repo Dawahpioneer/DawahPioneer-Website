@@ -108,6 +108,18 @@
                 <ul id="prayerTimes"></ul>
             </div>
         </div>
+
+        <div class="widget">
+            <h3>More tools</h3>
+            <p style="color: white; font-size: 0.9rem; text-align: center;">
+                Looking for more resources?
+            </p>
+            <div style="text-align: center; margin-top: 15px;">
+                <a href="tools.html" style="color: #fcde00; font-weight: bold; text-decoration: none; border: 1px solid #fcde00; padding: 8px 15px; border-radius: 5px;">
+                    Here's more tools →
+                </a>
+            </div>
+        </div>
     </aside>
 </div>
 
@@ -143,9 +155,8 @@
     // --- FETCH HADITH (VERSION STABLE) ---
     async function fetchDailyHadith() {
         try {
-            // On utilise une API alternative très stable
             const res = await fetch('https://api.sunnah.com/v1/collections/bukhari/hadiths/random', {
-                headers: { 'X-API-Key': 'master_key_non_essentielle_ici_test' } // Exemple
+                headers: { 'X-API-Key': 'master_key_non_essentielle_ici_test' }
             }).catch(() => fetch('https://random-hadith-generator.vercel.app/bukhari/'));
             
             const data = await res.json();
@@ -154,7 +165,6 @@
                 document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
             } else { throw new Error(); }
         } catch (e) {
-            // Si l'API échoue encore, on met un hadith au hasard par programmation pour ne pas avoir de doublon
             const backups = [
                 "The best among you are those who have the best manners.",
                 "Verify news before passing it on to others.",
@@ -165,13 +175,12 @@
         }
     }
 
-    // --- PRAYER TIMES (TOUS LES MOMENTS) ---
+    // --- PRAYER TIMES ---
     async function showPrayerTimes(city) {
         try {
             const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
             const data = await res.json();
             const t = data.data.timings;
-            // On définit la liste complète que TU veux
             const list = [
                 {n: "Imsak", v: t.Imsak, s: true},
                 {n: "Fajr", v: t.Fajr, s: false},
