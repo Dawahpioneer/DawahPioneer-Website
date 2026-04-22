@@ -244,20 +244,25 @@
             } catch (e) { console.error(e); }
         }
 
-        // --- FETCH HADITH ---
-        async function fetchDailyHadith() {
-            try {
-                const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/');
-                const data = await res.json();
-                if (data.data) {
-                    document.getElementById('hadithText').innerText = `"${data.data.hadith_english}"`;
-                    document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
-                }
-            } catch (e) { 
-                document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
-                document.getElementById('hadithRef').innerText = "— Bukhari";
-            }
+     async function fetchDailyHadith() {
+    try {
+        // L'URL unique force le renouvellement du Hadith
+        const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/?t=' + new Date().getTime());
+        const data = await res.json();
+        
+        if (data.data && data.data.hadith_english) {
+            document.getElementById('hadithText').innerText = `"${data.data.hadith_english}"`;
+            document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
+        } else {
+            // Si l'API répond mais que la donnée est vide, on met un Hadith de secours
+            throw new Error("Data empty");
         }
+    } catch (e) { 
+        console.log("Erreur API, affichage du Hadith de secours");
+        document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
+        document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
+    }
+}
 
         // --- LOGIQUE PRIÈRES & DATE ---
         const allMoments = ["Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight"];
