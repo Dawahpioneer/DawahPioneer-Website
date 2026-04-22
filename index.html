@@ -211,100 +211,105 @@
     <footer>
         <p>&copy; 2026 - Created for Allah SWT</p>
     </footer>
-
     <script>
-        // --- ROTATION AUTOMATIQUE ---
-        let currentSlide = 0;
-        const slides = ['slideAyah', 'slideHadith'];
-        const titles = ['Verse of the Day', 'Hadith of the Day'];
+    // --- ROTATION AUTOMATIQUE ---
+    let currentSlide = 0;
+    const slides = ['slideAyah', 'slideHadith'];
+    const titles = ['Verse of the Day', 'Hadith of the Day'];
 
-        function rotateSlides() {
-            document.getElementById(slides[currentSlide]).classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            document.getElementById(slides[currentSlide]).classList.add('active');
-            document.getElementById('sliderTitle').innerText = titles[currentSlide];
-        }
-
-        setInterval(rotateSlides, 10000); // Change toutes les 10 secondes
-
-        // --- FETCH VERSET ---
-        async function fetchDailyAyah() {
-            try {
-                const randomAyah = Math.floor(Math.random() * 6236) + 1;
-                const resArabic = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/quran-simple`);
-                const dataArabic = await resArabic.json();
-                const resEnglish = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/en.asad`);
-                const dataEnglish = await resEnglish.json();
-
-                if (dataArabic.code === 200 && dataEnglish.code === 200) {
-                    document.getElementById('ayahArabic').innerText = dataArabic.data.text;
-                    document.getElementById('ayahEnglish').innerText = `"${dataEnglish.data.text}"`;
-                    document.getElementById('ayahRef').innerText = `— Surah ${dataEnglish.data.surah.englishName} (${dataEnglish.data.surah.number}:${dataEnglish.data.numberInSurah})`;
-                }
-            } catch (e) { console.error(e); }
-        }
-
-     async function fetchDailyHadith() {
-    try {
-        // L'URL unique force le renouvellement du Hadith
-        const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/?t=' + new Date().getTime());
-        const data = await res.json();
+    function rotateSlides() {
+        const currentElem = document.getElementById(slides[currentSlide]);
+        if(currentElem) currentElem.classList.remove('active');
         
-        if (data.data && data.data.hadith_english) {
-            document.getElementById('hadithText').innerText = `"${data.data.hadith_english}"`;
-            document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
-        } else {
-            // Si l'API répond mais que la donnée est vide, on met un Hadith de secours
-            throw new Error("Data empty");
-        }
-     } catch (e) { console.error(e); }
-       
+        currentSlide = (currentSlide + 1) % slides.length;
+        
+        const nextElem = document.getElementById(slides[currentSlide]);
+        if(nextElem) nextElem.classList.add('active');
+        
+        document.getElementById('sliderTitle').innerText = titles[currentSlide];
     }
-}
 
-        // --- LOGIQUE PRIÈRES & DATE ---
-        const allMoments = ["Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight"];
+    setInterval(rotateSlides, 10000); 
 
-        async function getPrayerTimes(city) {
-            try {
-                const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
-                const data = await response.json();
-                return data.data.timings;
-            } catch (error) { return null; }
+    // --- FETCH VERSET ---
+    async function fetchDailyAyah() {
+        try {
+            const randomAyah = Math.floor(Math.random() * 6236) + 1;
+            const resArabic = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/quran-simple`);
+            const dataArabic = await resArabic.json();
+            const resEnglish = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/en.asad`);
+            const dataEnglish = await resEnglish.json();
+
+            if (dataArabic.code === 200 && dataEnglish.code === 200) {
+                document.getElementById('ayahArabic').innerText = dataArabic.data.text;
+                document.getElementById('ayahEnglish').innerText = `"${dataEnglish.data.text}"`;
+                document.getElementById('ayahRef').innerText = `— Surah ${dataEnglish.data.surah.englishName} (${dataEnglish.data.surah.number}:${dataEnglish.data.numberInSurah})`;
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    // --- FETCH HADITH (CORRIGÉ) ---
+    async function fetchDailyHadith() {
+        try {
+            const res = await fetch('https://random-hadith-generator.vercel.app/bukhari/?t=' + new Date().getTime());
+            const data = await res.json();
+            
+            if (data.data && data.data.hadith_english) {
+                document.getElementById('hadithText').innerText = `"${data.data.hadith_english}"`;
+                document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
+            } else {
+                throw new Error("Data empty");
+            }
+        } catch (e) { 
+            console.error(e);
+            document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
+            document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
         }
+    }
 
-        function updateCity() {
-            const city = document.getElementById('cityInput').value || "Montreal";
-            showPrayerTimes(city);
-        }
+    // --- LOGIQUE PRIÈRES & DATE ---
+    const allMoments = ["Imsak", "Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha", "Midnight"];
 
-        function showPrayerTimes(city) {
-            const listElement = document.getElementById("prayerTimes");
-            getPrayerTimes(city).then(prayerTimes => {
-                if (!prayerTimes) return;
-                let html = "";
-                allMoments.forEach(moment => {
-                    if (prayerTimes[moment]) {
-                        const isSecondary = ["Imsak", "Sunrise", "Midnight"].includes(moment);
-                        html += `<li><span class="prayer-name ${isSecondary ? 'secondary' : ''}">${moment}</span><span class="prayer-time">${prayerTimes[moment]}</span></li>`;
-                    }
-                });
-                listElement.innerHTML = html;
+    async function getPrayerTimes(city) {
+        try {
+            const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
+            const data = await response.json();
+            return data.data.timings;
+        } catch (error) { return null; }
+    }
+
+    function updateCity() {
+        const city = document.getElementById('cityInput').value || "Montreal";
+        showPrayerTimes(city);
+    }
+
+    function showPrayerTimes(city) {
+        const listElement = document.getElementById("prayerTimes");
+        getPrayerTimes(city).then(prayerTimes => {
+            if (!prayerTimes) return;
+            let html = "";
+            allMoments.forEach(moment => {
+                if (prayerTimes[moment]) {
+                    const isSecondary = ["Imsak", "Sunrise", "Midnight"].includes(moment);
+                    html += `<li><span class="prayer-name ${isSecondary ? 'secondary' : ''}">${moment}</span><span class="prayer-time">${prayerTimes[moment]}</span></li>`;
+                }
             });
-        }
+            listElement.innerHTML = html;
+        });
+    }
 
-        function showDate() {
-            const today = new Date();
-            const options = { weekday: 'long', month: 'long', day: 'numeric' };
-            document.getElementById("currentDate").innerText = today.toLocaleDateString('en-US', options);
-        }
+    function showDate() {
+        const today = new Date();
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        document.getElementById("currentDate").innerText = today.toLocaleDateString('en-US', options);
+    }
 
-        window.onload = function() {
-            showDate();
-            showPrayerTimes("Montreal");
-            fetchDailyAyah();
-            fetchDailyHadith();
-        };
-    </script>
+    window.onload = function() {
+        showDate();
+        showPrayerTimes("Montreal");
+        fetchDailyAyah();
+        fetchDailyHadith();
+    };
+</script>
 </body>
 </html>
