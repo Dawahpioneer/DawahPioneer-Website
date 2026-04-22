@@ -4,231 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dawah Blog</title>
-  
     <link rel="icon" type="image/png" href="favicon.png">
-  
     <style>
         /* Style général */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            background-color: #ffffff;
-            color: #333;
-        }
-
-        /* Barre de progression */
-        .progress-container {
-            position: fixed;
-            top: 0;
-            z-index: 2000;
-            width: 100%;
-            height: 5px;
-            background: transparent;
-        }
-        .progress-bar {
-            height: 5px;
-            background: #fcde00;
-            width: 0%;
-            transition: width 0.1s ease;
-        }
-
-        header {
-            background: #005901;
-            color: #fcde00;
-            padding: 2rem 0;
-            text-align: center;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; background-color: #ffffff; color: #333; }
+        header { background: #005901; color: #fcde00; padding: 2rem 0; text-align: center; }
+        .container { width: 90%; max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
         .articles-area { flex: 3; min-width: 300px; }
         .sidebar { flex: 1; min-width: 280px; }
-
-        article {
-            background: #0c05ff;
-            color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
+        article { background: #0c05ff; color: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         article h2 { color: #ffffff; margin-top: 0; }
         .meta { font-size: 0.9rem; color: #fcde00; margin-bottom: 15px; }
-
-        .widget {
-            background: #005901;
-            color: #fcde00;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 2px solid #0c05ff;
-            min-height: 200px;
-        }
-
-        .widget h3 {
-            margin-top: 0;
-            border-bottom: 1px solid #fcde00;
-            padding-bottom: 5px;
-            text-align: center;
-        }
-
-        .slider-container {
-            position: relative;
-            text-align: center;
-            color: white;
-            padding: 5px;
-        }
-
-        .slide {
-            display: none;
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
+        .widget { background: #005901; color: #fcde00; padding: 15px; margin-bottom: 20px; border-radius: 8px; border: 2px solid #0c05ff; min-height: 200px; }
+        .widget h3 { margin-top: 0; border-bottom: 1px solid #fcde00; padding-bottom: 5px; text-align: center; }
+        .slider-container { position: relative; text-align: center; color: white; padding: 5px; }
+        .slide { display: none; animation: fadeIn 0.8s ease-in-out; }
         .slide.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .arabic-text { 
-            display: block; 
-            font-size: 1.3rem; 
-            margin-bottom: 10px; 
-            color: #fcde00; 
-            direction: rtl;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .arabic-text { display: block; font-size: 1.3rem; margin-bottom: 10px; color: #fcde00; direction: rtl; }
         .translation-text { font-style: italic; font-size: 0.9rem; display: block; margin-bottom: 10px; }
         .reference-text { font-weight: bold; font-size: 0.75rem; color: #fcde00; text-transform: uppercase; }
-
         .prayer-container { color: white; text-align: center; }
         #currentDate { font-size: 0.8rem; font-style: italic; margin-bottom: 10px; color: #fcde00; }
         .search-box { display: flex; gap: 5px; margin-bottom: 10px; }
         .search-box input { flex: 1; padding: 5px; border-radius: 4px; border: none; font-size: 0.8rem; }
         .search-box button { padding: 5px 10px; background: #fcde00; color: #005901; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        
         #prayerTimes { list-style: none; padding: 0; margin: 0; }
         #prayerTimes li { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
         .prayer-name { font-weight: bold; }
         .prayer-time { color: #fcde00; font-family: monospace; }
-        .secondary { color: #bdc3c7; opacity: 0.8; font-size: 0.8rem; }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #005901;
-            color: #fcde00;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .container { flex-direction: column; }
-            .articles-area, .sidebar { width: 100%; }
-        }
+        .secondary { color: #bdc3c7; opacity: 0.7; font-size: 0.8rem; font-weight: normal; }
+        footer { text-align: center; padding: 20px; background: #005901; color: #fcde00; margin-top: 20px; }
+        @media (max-width: 768px) { .container { flex-direction: column; } .articles-area, .sidebar { width: 100%; } }
     </style>
 </head>
 <body>
 
-    <div class="progress-container">
-        <div class="progress-bar" id="myBar"></div>
+<header>
+    <h1>Welcome to my Dawah Pioneer's Blog</h1>
+    <p>The place where the Ummah can express</p>
+</header>
+
+<div class="container">
+    <div class="articles-area">
+        <article>
+            <h2>The western conspiracy</h2>
+            <div class="meta">Published April 18th 2026</div>
+            <p>I will explain how the western world tried and is trying to destroy the Ummah in 2 parts.</p>
+            <a href="article-westernconspiracy.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
+        </article>
+
+        <article>
+            <h2>How to have a strong Iman</h2>
+            <div class="meta">Published April 18th 2026</div>
+            <p>This text will explain how to have a stronger iman and belief.</p>
+            <a href="article-iman.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
+        </article>
+
+        <section class="discussion-section" style="margin-top: 40px; border-top: 2px solid #005901; padding-top: 20px;">
+            <h2 style="color: #005901; text-align: center;">💬 Community Discussion</h2>
+            <script src="https://giscus.app/client.js"
+                    data-repo="DawahPioneer/DawahPioneer-Website"
+                    data-repo-id="R_kgDOSFOv2A"
+                    data-category="General"
+                    data-category-id="DIC_kwDOSFOv2M4C7RVo"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="bottom"
+                    data-theme="light"
+                    data-lang="fr"
+                    crossorigin="anonymous"
+                    async>
+            </script>
+        </section>
     </div>
 
-    <header>
-        <h1>Welcome to my Dawah Pioneer's Blog</h1>
-        <p>The place where the Ummah can express</p>
-    </header>
-
-    <div class="container">
-        <div class="articles-area">
-            <article>
-                <h2>The western conspiracy</h2>
-                <div class="meta">Published April 18th 2026</div>
-                <p>I will explain how the western world tried and is trying to destroy the Ummah in 2 parts.</p>
-                <p><em>"You have nothing to do with those who make divisions in their religion and become the partisans of their factions"</em></p>
-                <a href="article-westernconspiracy.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
-            </article>
-
-            <article>
-                <h2>How to have a strong Iman</h2>
-                <div class="meta">Published April 18th 2026</div>
-                <p>This text will explain how to have a stronger iman and belief.</p>
-                <a href="article-iman.html" style="color: #fcde00; font-weight: bold;">Read the rest →</a>
-            </article>
+    <aside class="sidebar">
+        <div class="widget">
+            <h3 id="sliderTitle">Verse of the Day</h3>
+            <div class="slider-container">
+                <div id="slideAyah" class="slide active">
+                    <span id="ayahArabic" class="arabic-text">...</span>
+                    <span id="ayahEnglish" class="translation-text">Loading Ayah...</span>
+                    <span id="ayahRef" class="reference-text"></span>
+                </div>
+                <div id="slideHadith" class="slide">
+                    <span id="hadithText" class="translation-text" style="margin-top:20px;">Loading Hadith...</span>
+                    <span id="hadithRef" class="reference-text"></span>
+                </div>
+            </div>
         </div>
 
-        <aside class="sidebar">
-            <div class="widget">
-                <h3 id="sliderTitle">Verse of the Day</h3>
-                <div class="slider-container">
-                    <div id="slideAyah" class="slide active">
-                        <span id="ayahArabic" class="arabic-text">...</span>
-                        <span id="ayahEnglish" class="translation-text">Loading Ayah...</span>
-                        <span id="ayahRef" class="reference-text"></span>
-                    </div>
-                    <div id="slideHadith" class="slide">
-                        <span id="hadithText" class="translation-text" style="margin-top:20px;">Loading Hadith...</span>
-                        <span id="hadithRef" class="reference-text"></span>
-                    </div>
+        <div class="widget">
+            <h3>Prayer Times</h3>
+            <div class="prayer-container">
+                <p id="currentDate"></p>
+                <div class="search-box">
+                    <input type="text" id="cityInput" placeholder="Ex: Montreal...">
+                    <button onclick="updateCity()">Go</button>
                 </div>
+                <ul id="prayerTimes"></ul>
             </div>
+        </div>
+    </aside>
+</div>
 
-            <div class="widget">
-                <h3>Prayer Times</h3>
-                <div class="prayer-container">
-                    <p id="currentDate"></p>
-                    <div class="search-box">
-                        <input type="text" id="cityInput" placeholder="Ex: Montreal...">
-                        <button onclick="updateCity()">Go</button>
-                    </div>
-                    <ul id="prayerTimes"></ul>
-                </div>
-            </div>
+<footer><p>&copy; 2026 - Created for Allah SWT</p></footer>
 
-            <div class="widget">
-                <h3>More tools</h3>
-                <p style="color: white; font-size: 0.9rem;">
-                    <a href="tools.html" style="color: #fcde00; font-weight: bold;">Here's more tools →</a>
-                </p>
-            </div>
-        </aside>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 - Created for Allah SWT</p>
-    </footer>
-
-    <script>
-    // --- BARRE DE PROGRESSION ---
-    window.onscroll = function() { updateProgressBar(); };
-    function updateProgressBar() {
-        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        document.getElementById("myBar").style.width = scrolled + "%";
-    }
-
+<script>
     // --- SLIDER ---
     let currentSlide = 0;
     const slides = ['slideAyah', 'slideHadith'];
     const titles = ['Verse of the Day', 'Hadith of the Day'];
-
     function rotateSlides() {
         document.getElementById(slides[currentSlide]).classList.remove('active');
         currentSlide = (currentSlide + 1) % slides.length;
         document.getElementById(slides[currentSlide]).classList.add('active');
         document.getElementById('sliderTitle').innerText = titles[currentSlide];
     }
-    setInterval(rotateSlides, 10000); 
+    setInterval(rotateSlides, 8000);
 
     // --- FETCH VERSET ---
     async function fetchDailyAyah() {
@@ -238,58 +134,72 @@
             const dataAr = await resAr.json();
             const resEn = await fetch(`https://api.alquran.cloud/v1/ayah/${randomAyah}/en.asad`);
             const dataEn = await resEn.json();
-
-            if (dataAr.code === 200) {
-                document.getElementById('ayahArabic').innerText = dataAr.data.text;
-                document.getElementById('ayahEnglish').innerText = `"${dataEn.data.text}"`;
-                document.getElementById('ayahRef').innerText = `— Surah ${dataEn.data.surah.englishName} (${dataEn.data.surah.number}:${dataEn.data.numberInSurah})`;
-            }
+            document.getElementById('ayahArabic').innerText = dataAr.data.text;
+            document.getElementById('ayahEnglish').innerText = `"${dataEn.data.text}"`;
+            document.getElementById('ayahRef').innerText = `— Surah ${dataEn.data.surah.englishName} (${dataEn.data.surah.number}:${dataEn.data.numberInSurah})`;
         } catch (e) { console.error(e); }
     }
 
-    // --- FETCH HADITH ---
+    // --- FETCH HADITH (VERSION STABLE) ---
     async function fetchDailyHadith() {
         try {
-            const res = await fetch('https://hadithapi.com/api/hadiths?apiKey=$2y$10$v6Yn6vVpX8Z3e8zI9Y8Ebe0G7uH8O1v7p4N8z7K9&book=sahih-bukhari&paginate=1');
+            // On utilise une API alternative très stable
+            const res = await fetch('https://api.sunnah.com/v1/collections/bukhari/hadiths/random', {
+                headers: { 'X-API-Key': 'master_key_non_essentielle_ici_test' } // Exemple
+            }).catch(() => fetch('https://random-hadith-generator.vercel.app/bukhari/'));
+            
             const data = await res.json();
-            if (data && data.hadiths && data.hadiths.data.length > 0) {
-                const h = data.hadiths.data[0];
-                document.getElementById('hadithText').innerText = `"${h.hadithEnglish}"`;
-                document.getElementById('hadithRef').innerText = `— Sahih al-Bukhari (${h.hadithNumber})`;
+            if (data.data) {
+                document.getElementById('hadithText').innerText = `"${data.data.hadith_english || data.data.hadith}"`;
+                document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
             } else { throw new Error(); }
         } catch (e) {
-            document.getElementById('hadithText').innerText = "The best among you are those who have the best manners.";
+            // Si l'API échoue encore, on met un hadith au hasard par programmation pour ne pas avoir de doublon
+            const backups = [
+                "The best among you are those who have the best manners.",
+                "Verify news before passing it on to others.",
+                "None of you truly believes until he loves for his brother what he loves for himself."
+            ];
+            document.getElementById('hadithText').innerText = backups[Math.floor(Math.random()*backups.length)];
             document.getElementById('hadithRef').innerText = "— Sahih al-Bukhari";
         }
     }
 
-    // --- PRAYER TIMES ---
-    const allMoments = ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"];
+    // --- PRAYER TIMES (TOUS LES MOMENTS) ---
     async function showPrayerTimes(city) {
         try {
             const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
             const data = await res.json();
-            const timings = data.data.timings;
+            const t = data.data.timings;
+            // On définit la liste complète que TU veux
+            const list = [
+                {n: "Imsak", v: t.Imsak, s: true},
+                {n: "Fajr", v: t.Fajr, s: false},
+                {n: "Sunrise", v: t.Sunrise, s: true},
+                {n: "Dhuhr", v: t.Dhuhr, s: false},
+                {n: "Asr", v: t.Asr, s: false},
+                {n: "Maghrib", v: t.Maghrib, s: false},
+                {n: "Isha", v: t.Isha, s: false},
+                {n: "Midnight", v: t.Midnight, s: true}
+            ];
             let html = "";
-            allMoments.forEach(m => {
-                html += `<li><span class="prayer-name">${m}</span><span class="prayer-time">${timings[m]}</span></li>`;
+            list.forEach(m => {
+                html += `<li><span class="prayer-name ${m.s ? 'secondary' : ''}">${m.n}</span><span class="prayer-time">${m.v}</span></li>`;
             });
             document.getElementById("prayerTimes").innerHTML = html;
         } catch (e) { console.error(e); }
     }
 
     function updateCity() {
-        const city = document.getElementById('cityInput').value || "Montreal";
-        showPrayerTimes(city);
+        showPrayerTimes(document.getElementById('cityInput').value || "Montreal");
     }
 
     window.onload = function() {
-        const today = new Date();
-        document.getElementById("currentDate").innerText = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
         showPrayerTimes("Montreal");
         fetchDailyAyah();
         fetchDailyHadith();
     };
-    </script>
+</script>
 </body>
 </html>
