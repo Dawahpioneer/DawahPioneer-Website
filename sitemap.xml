@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://dawahpioneer.github.io/DawahPioneer-Website/index.html</loc></url>
-  <url><loc>https://dawahpioneer.github.io/DawahPioneer-Website/tools.html</loc></url>
-  <url><loc>https://dawahpioneer.github.io/DawahPioneer-Website/article-iman.html</loc></url>
-  <url><loc>https://dawahpioneer.github.io/DawahPioneer-Website/article-westernconspiracy.html</loc></url>
+  
+  <url>
+    <loc>https://dawahpioneer.github.io/DawahPioneer-Website/</loc>
+    <lastmod>2026-04-26</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <url>
+    <loc>https://dawahpioneer.github.io/DawahPioneer-Website/tools.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://dawahpioneer.github.io/DawahPioneer-Website/article-westernconspiracy.html</loc>
+    <lastmod>2026-04-18</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://dawahpioneer.github.io/DawahPioneer-Website/article-iman.html</loc>
+    <lastmod>2026-04-18</lastmod>
+    <priority>0.70</priority>
+  </url>
+    <url>
+    <loc>https://dawahpioneer.github.io/DawahPioneer-Website/allahdecreedramadan.html</loc>
+    <lastmod>2026-04-26</lastmod>
+    <priority>0.70</priority>
+  </url>
+
 </urlset>
