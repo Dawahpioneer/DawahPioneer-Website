@@ -208,7 +208,7 @@
             <div class="prayer-container">
                 <p id="currentDate"></p>
                 <div class="search-box">
-                    <input type="text" id="cityInput" placeholder="Ex: Montreal...">
+                    <input type="text" id="cityInput" placeholder="Ex: Makkah...">
                     <button onclick="updateCity()">Go</button>
                 </div>
                 <ul id="prayerTimes"></ul>
@@ -337,7 +337,7 @@ async function showPrayerTimes(city) {
 }
 
     function updateCity() {
-        showPrayerTimes(document.getElementById('cityInput').value || "Makkah");
+        showPrayerTimes(document.getElementById('cityInput').value || "Montreal");
     }
 </script>
 </body>
