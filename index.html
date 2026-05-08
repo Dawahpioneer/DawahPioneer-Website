@@ -307,22 +307,37 @@
         document.getElementById('hadithRef').innerText = backups[0].r;
     }
 
-    async function showPrayerTimes(city) {
-        try {
-            const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
-            const data = await res.json();
-            const t = data.data.timings;
-            const list = [{n: "Fajr", v: t.Fajr}, {n: "Dhuhr", v: t.Dhuhr}, {n: "Asr", v: t.Asr}, {n: "Maghrib", v: t.Maghrib}, {n: "Isha", v: t.Isha}];
-            let html = "";
-            list.forEach(m => {
-                html += `<li><span class="prayer-name">${m.n}</span><span class="prayer-time">${m.v}</span></li>`;
-            });
-            document.getElementById("prayerTimes").innerHTML = html;
-        } catch (e) { console.error(e); }
+async function showPrayerTimes(city) {
+    try {
+        const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
+        const data = await res.json();
+        const t = data.data.timings;
+
+        // On organise la liste avec les nouveaux horaires
+        const list = [
+            {n: "Imsak", v: t.Imsak, s: true},
+            {n: "Fajr", v: t.Fajr, s: false},
+            {n: "Sunrise", v: t.Sunrise, s: true},
+            {n: "Dhuhr", v: t.Dhuhr, s: false},
+            {n: "Asr", v: t.Asr, s: false},
+            {n: "Maghrib", v: t.Maghrib, s: false},
+            {n: "Isha", v: t.Isha, s: false},
+            {n: "Midnight", v: t.Midnight, s: true}
+        ];
+
+        let html = "";
+        list.forEach(m => {
+            // On ajoute une classe 'secondary' si m.s est vrai pour un look plus épuré
+            html += `<li><span class="prayer-name ${m.s ? 'secondary' : ''}">${m.n}</span><span class="prayer-time">${m.v}</span></li>`;
+        });
+        document.getElementById("prayerTimes").innerHTML = html;
+    } catch (e) { 
+        console.error("Erreur lors de la récupération des horaires:", e); 
     }
+}
 
     function updateCity() {
-        showPrayerTimes(document.getElementById('cityInput').value || "Montreal");
+        showPrayerTimes(document.getElementById('cityInput').value || "Makkah");
     }
 </script>
 </body>
