@@ -9,30 +9,87 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="shortcut icon" href="favicon.ico">
     <style>
+        /* --- SYSTÈME DE TRANSITION ET VARIABLES --- */
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --header-bg: linear-gradient(135deg, #005901 0%, #004400 100%);
+            --article-bg: #0c05ff;
+            --nav-bg: white;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #002801;
+            --article-bg: #1a1a1a;
+            --nav-bg: #1e1e1e;
+            --shadow: rgba(0,0,0,0.5);
+        }
+
         /* Style général */
         body { 
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             line-height: 1.6; 
             margin: 0; 
-            background-color: #f4f7f6; /* Fond légèrement gris pour faire ressortir les blocs */
-            color: #333; 
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
+
+        /* --- BARRE DE PROGRESSION --- */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #fcde00;
+            width: 0%;
+        }
+
+        /* --- BOUTON DARK MODE --- */
+        #darkModetoggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: #fcde00;
+            color: #005901;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        #darkModetoggle:hover { transform: scale(1.1); }
         
         header { 
-            background: linear-gradient(135deg, #005901 0%, #004400 100%); 
+            background: var(--header-bg); 
             color: #fcde00; 
             padding: 3rem 0; 
             text-align: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px var(--shadow);
+            transition: background 0.4s ease;
         }
 
         .container { width: 90%; max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; gap: 30px; padding: 30px 20px; }
         .articles-area { flex: 3; min-width: 300px; }
         .sidebar { flex: 1; min-width: 280px; }
         
-        /* Barre de navigation */
         .nav-bar { 
-            background: white; 
+            background: var(--nav-bg); 
             padding: 15px 20px; 
             margin-bottom: 25px; 
             border-radius: 12px; 
@@ -40,29 +97,28 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px var(--shadow);
+            transition: background 0.4s ease;
         }
         .nav-bar a { color: #005901; text-decoration: none; font-weight: bold; transition: 0.3s; }
-        .nav-bar a:hover { color: #0c05ff; transform: translateX(5px); }
+        body.dark-mode .nav-bar a { color: #fcde00; }
 
         /* Articles */
         article { 
-            background: #0c05ff; 
+            background: var(--article-bg); 
             color: white; 
             padding: 25px; 
             margin-bottom: 25px; 
             border-radius: 15px; 
-            box-shadow: 0 10px 20px rgba(12, 5, 255, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px var(--shadow);
+            transition: transform 0.3s ease, background 0.4s ease;
         }
-        article:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(12, 5, 255, 0.25);
-        }
+        article:hover { transform: translateY(-5px); }
         article h2 { color: #ffffff; margin-top: 0; font-size: 1.6rem; }
+        body.dark-mode article h2 { color: #fcde00; }
         .meta { font-size: 0.85rem; color: #fcde00; margin-bottom: 15px; opacity: 0.9; }
         
-        /* Widgets Sidebar (Glassmorphism) */
+        /* Sidebar Widgets */
         .widget { 
             background: rgba(0, 89, 1, 0.95); 
             color: #fcde00; 
@@ -73,59 +129,38 @@
             min-height: 200px;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
             transition: all 0.3s ease;
         }
-        .widget:hover {
-            transform: scale(1.02);
-            border-color: #fcde00;
-        }
-        .widget h3 { 
-            margin-top: 0; 
-            border-bottom: 2px solid rgba(252, 222, 0, 0.3); 
-            padding-bottom: 10px; 
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 1.1rem;
-        }
+        body.dark-mode .widget { background: rgba(0, 40, 1, 0.95); border-color: #fcde00; }
 
-        /* Slider & Prayer Elements */
+        /* ... Styles restants du slider et prières ... */
         .slider-container { position: relative; text-align: center; color: white; padding: 5px; }
         .slide { display: none; animation: fadeIn 0.8s ease-in-out; }
         .slide.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        
         .arabic-text { display: block; font-size: 1.4rem; margin-bottom: 12px; color: #fcde00; direction: rtl; line-height: 1.8; }
         .translation-text { font-style: italic; font-size: 0.95rem; display: block; margin-bottom: 10px; opacity: 0.9; }
         .reference-text { font-weight: bold; font-size: 0.75rem; color: #fcde00; text-transform: uppercase; opacity: 0.8; }
-        
         .prayer-container { color: white; text-align: center; }
         #currentDate { font-size: 0.85rem; font-style: italic; margin-bottom: 15px; color: #fcde00; }
-        
         .search-box { display: flex; gap: 8px; margin-bottom: 15px; }
-        .search-box input { flex: 1; padding: 8px; border-radius: 6px; border: none; font-size: 0.85rem; }
-        .search-box button { padding: 8px 15px; background: #fcde00; color: #005901; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .search-box button:hover { background: #fff; }
-
+        .search-box input { flex: 1; padding: 8px; border-radius: 6px; border: none; font-size: 0.85rem; color: #333; }
+        .search-box button { padding: 8px 15px; background: #fcde00; color: #005901; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         #prayerTimes { list-style: none; padding: 0; margin: 0; }
-        #prayerTimes li { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 8px 0; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
-            font-size: 0.95rem; 
-        }
-        .prayer-name { font-weight: bold; }
+        #prayerTimes li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.95rem; }
         .prayer-time { color: #fcde00; font-family: 'Courier New', monospace; font-weight: bold; }
-        .secondary { color: #bdc3c7; opacity: 0.6; font-size: 0.85rem; }
 
-        footer { text-align: center; padding: 30px; background: #005901; color: #fcde00; margin-top: 40px; font-weight: bold; }
-        
-        @media (max-width: 768px) { .container { flex-direction: column; padding: 15px; } .articles-area, .sidebar { width: 100%; } }
+        footer { text-align: center; padding: 30px; background: #005901; color: #fcde00; margin-top: 40px; }
+        @media (max-width: 768px) { .container { flex-direction: column; } .articles-area, .sidebar { width: 100%; } }
     </style>
 </head>
 <body>
+
+<div class="progress-container">
+    <div class="progress-bar" id="myBar"></div>
+</div>
+
+<button id="darkModetoggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
 
 <header>
     <h1>Welcome to my Dawah Pioneer's Blog</h1>
@@ -141,34 +176,20 @@
       
         <article>
             <h2>How did Islam came to Morocco ?</h2>
-            <div class="meta">Published May 2nd 2026</div>
+            <div class="meta">Published May 8th 2026</div>
             <p>This article will explain how Islam came to the most western land at that time, Morocco.</p>
             <a href="islam-morocco.html" style="color: #fcde00; font-weight: bold; text-decoration: none; border-bottom: 1px solid #fcde00;">Read the rest →</a>
         </article>
 
-        <section class="discussion-section" style="margin-top: 50px; padding-top: 20px;">
+        <section class="discussion-section" style="margin-top: 50px;">
             <h2 style="color: #005901; text-align: center;">💬 Community Discussion</h2>
-            <script src="https://giscus.app/client.js"
-                    data-repo="DawahPioneer/DawahPioneer-Website"
-                    data-repo-id="R_kgDOSFOv2A"
-                    data-category="General"
-                    data-category-id="DIC_kwDOSFOv2M4C7RVo"
-                    data-mapping="pathname"
-                    data-strict="0"
-                    data-reactions-enabled="1"
-                    data-emit-metadata="0"
-                    data-input-position="bottom"
-                    data-theme="light"
-                    data-lang="fr"
-                    crossorigin="anonymous"
-                    async>
-            </script>
+            <div id="giscus-container"></div>
         </section>
     </div>
 
     <aside class="sidebar">
         <div class="widget">
-            <h3 id="sliderTitle">Verse of the Day</h3>
+            <h3 id="sliderTitle" style="text-align: center; text-transform: uppercase;">Verse of the Day</h3>
             <div class="slider-container">
                 <div id="slideAyah" class="slide active">
                     <span id="ayahArabic" class="arabic-text">...</span>
@@ -183,7 +204,7 @@
         </div>
 
         <div class="widget">
-            <h3>Prayer Times</h3>
+            <h3 style="text-align: center; text-transform: uppercase;">Prayer Times</h3>
             <div class="prayer-container">
                 <p id="currentDate"></p>
                 <div class="search-box">
@@ -193,23 +214,67 @@
                 <ul id="prayerTimes"></ul>
             </div>
         </div>
-
-        <div class="widget" style="text-align: center;">
-            <h3>More tools</h3>
-            <p style="color: white; font-size: 0.95rem; margin-bottom: 20px;">
-                Looking for more resources?
-            </p>
-            <a href="tools.html" style="color: #fcde00; font-weight: bold; text-decoration: none; border: 2px solid #fcde00; padding: 10px 20px; border-radius: 8px; display: inline-block; transition: 0.3s;">
-                View Tools →
-            </a>
-        </div>
     </aside>
 </div>
 
 <footer><p>&copy; 2026 - Created for Allah SWT</p></footer>
 
 <script>
-    // --- SLIDER ---
+    // --- DARK MODE LOGIC ---
+    function toggleDarkMode() {
+        const body = document.body;
+        const btn = document.getElementById('darkModetoggle');
+        body.classList.toggle('dark-mode');
+        
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            btn.innerText = "☀️";
+        } else {
+            localStorage.setItem('theme', 'light');
+            btn.innerText = "🌙";
+        }
+    }
+
+    // --- PROGRESS BAR LOGIC ---
+    window.onscroll = function() {
+        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        var scrolled = (winScroll / height) * 100;
+        document.getElementById("myBar").style.width = scrolled + "%";
+    };
+
+    // --- INITIALISATION ---
+    window.onload = function() {
+        // Appliquer le thème sauvegardé
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModetoggle').innerText = "☀️";
+        }
+
+        // Dates et Data
+        document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        showPrayerTimes("Montreal");
+        fetchDailyAyah();
+        fetchDailyHadith();
+        loadGiscus();
+    };
+
+    // --- GISCUS LOADER ---
+    function loadGiscus() {
+        const script = document.createElement('script');
+        script.src = "https://giscus.app/client.js";
+        script.setAttribute('data-repo', "DawahPioneer/DawahPioneer-Website");
+        script.setAttribute('data-repo-id', "R_kgDOSFOv2A");
+        script.setAttribute('data-category', "General");
+        script.setAttribute('data-category-id', "DIC_kwDOSFOv2M4C7RVo");
+        script.setAttribute('data-mapping', "pathname");
+        script.setAttribute('data-theme', localStorage.getItem('theme') === 'dark' ? 'dark' : 'light');
+        script.setAttribute('crossorigin', "anonymous");
+        script.async = true;
+        document.getElementById('giscus-container').appendChild(script);
+    }
+
+    // --- SLIDER & API CALLS (Même logique qu'avant) ---
     let currentSlide = 0;
     const slides = ['slideAyah', 'slideHadith'];
     const titles = ['Verse of the Day', 'Hadith of the Day'];
@@ -219,12 +284,10 @@
         currentSlide = (currentSlide + 1) % slides.length;
         const newSlide = document.getElementById(slides[currentSlide]);
         if (newSlide) newSlide.classList.add('active');
-        const titleElem = document.getElementById('sliderTitle');
-        if (titleElem) titleElem.innerText = titles[currentSlide];
+        document.getElementById('sliderTitle').innerText = titles[currentSlide];
     }
     setInterval(rotateSlides, 8000);
 
-    // --- FETCH VERSET ---
     async function fetchDailyAyah() {
         try {
             const randomAyah = Math.floor(Math.random() * 6236) + 1;
@@ -238,37 +301,21 @@
         } catch (e) { console.error(e); }
     }
 
-    // --- FETCH HADITH ---
     async function fetchDailyHadith() {
-        try {
-            const backups = [
-                {t: "The best among you are those who have the best manners.", r: "— Sahih al-Bukhari"},
-                {t: "None of you truly believes until he loves for his brother what he loves for himself.", r: "— Sahih al-Bukhari"},
-                {t: "The powerful man is not the one who can wrestle, but the one who can control his anger.", r: "— Sahih al-Bukhari"}
-            ];
-            const randomBackup = backups[Math.floor(Math.random()*backups.length)];
-            document.getElementById('hadithText').innerText = `"${randomBackup.t}"`;
-            document.getElementById('hadithRef').innerText = randomBackup.r;
-        } catch (e) { console.error(e); }
+        const backups = [{t: "The best among you are those who have the best manners.", r: "— Sahih al-Bukhari"}];
+        document.getElementById('hadithText').innerText = `"${backups[0].t}"`;
+        document.getElementById('hadithRef').innerText = backups[0].r;
     }
 
-    // --- PRAYER TIMES ---
     async function showPrayerTimes(city) {
         try {
             const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=&method=2`);
             const data = await res.json();
             const t = data.data.timings;
-            const list = [
-                {n: "Fajr", v: t.Fajr, s: false},
-                {n: "Sunrise", v: t.Sunrise, s: true},
-                {n: "Dhuhr", v: t.Dhuhr, s: false},
-                {n: "Asr", v: t.Asr, s: false},
-                {n: "Maghrib", v: t.Maghrib, s: false},
-                {n: "Isha", v: t.Isha, s: false}
-            ];
+            const list = [{n: "Fajr", v: t.Fajr}, {n: "Dhuhr", v: t.Dhuhr}, {n: "Asr", v: t.Asr}, {n: "Maghrib", v: t.Maghrib}, {n: "Isha", v: t.Isha}];
             let html = "";
             list.forEach(m => {
-                html += `<li><span class="prayer-name ${m.s ? 'secondary' : ''}">${m.n}</span><span class="prayer-time">${m.v}</span></li>`;
+                html += `<li><span class="prayer-name">${m.n}</span><span class="prayer-time">${m.v}</span></li>`;
             });
             document.getElementById("prayerTimes").innerHTML = html;
         } catch (e) { console.error(e); }
@@ -277,13 +324,6 @@
     function updateCity() {
         showPrayerTimes(document.getElementById('cityInput').value || "Montreal");
     }
-
-    window.onload = function() {
-        document.getElementById("currentDate").innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-        showPrayerTimes("Montreal");
-        fetchDailyAyah();
-        fetchDailyHadith();
-    };
 </script>
 </body>
 </html>
